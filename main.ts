@@ -39,9 +39,9 @@ function setDate () {
 }
 function setTime () {
     // the first 2 characters after command
-    minute = stringIn.substr(2, 2)
+    hour = stringIn.substr(2, 2)
     // the next 2 characters command
-    hour = stringIn.substr(4, 2)
+    minute = stringIn.substr(4, 2)
     DS3231.dateTime(
     DS3231.year(),
     DS3231.month(),
@@ -74,8 +74,8 @@ serial.onDataReceived(serial.delimiters(Delimiters.CarriageReturn), function () 
     }
 })
 let command = ""
-let hour = ""
 let minute = ""
+let hour = ""
 let year = ""
 let month = ""
 let stringIn = ""
