@@ -10,12 +10,8 @@ function makeReading () {
     BME280.PowerOff()
 }
 input.onButtonPressed(Button.A, function () {
-    BME280.PowerOn()
-    basic.pause(1000)
-    basic.showString("P" + BME280.pressure(BME280_P.hPa))
-    basic.showString("T" + BME280.temperature(BME280_T.T_C))
-    basic.showString("H" + BME280.humidity())
-    BME280.PowerOff()
+    basic.showString("" + (dateTimeReadings[0]))
+    basic.showString("" + (weatherReadings[0]))
     basic.pause(1000)
     basic.showNumber(count)
     basic.pause(1000)
@@ -58,6 +54,15 @@ function setTime () {
     basic.showNumber(DS3231.hour())
     basic.showNumber(DS3231.minute())
 }
+radio.onReceivedString(function (receivedString) {
+    basic.pause(2000)
+    for (let index = 0; index <= count - 1; index++) {
+        radio.sendString("" + (dateTimeReadings[index]))
+        radio.sendString("" + (weatherReadings[index]))
+        radio.sendString(String.fromCharCode(13))
+        basic.pause(500)
+    }
+})
 serial.onDataReceived(serial.delimiters(Delimiters.CarriageReturn), function () {
     stringIn = serial.readUntil(serial.delimiters(Delimiters.CarriageReturn))
     command = stringIn.substr(0, 2)
@@ -74,13 +79,25 @@ let minute = ""
 let year = ""
 let month = ""
 let stringIn = ""
+let dateTimeReadings: string[] = []
 let PTH = ""
 let dateTime = ""
 let time = ""
 let date = ""
 let count = 0
+let weatherReadings: string[] = []
 let oneMinute = 60 * 1000
-let weatherReadings: number[] = []
+weatherReadings = []
 count = 0
 radio.setGroup(1)
 radio.setTransmitPower(7)
+loops.everyInterval(oneMinute, function () {
+    readTime()
+    dateTimeReadings.unshift(dateTime)
+    makeReading()
+    weatherReadings.unshift(PTH)
+    count += 1
+    basic.showIcon(IconNames.Heart)
+    basic.pause(100)
+    basic.clearScreen()
+})
