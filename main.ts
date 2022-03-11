@@ -33,9 +33,10 @@ function setDate () {
     DS3231.minute(),
     0
     )
-    basic.showNumber(DS3231.date())
-    basic.showNumber(DS3231.month())
-    basic.showNumber(DS3231.year())
+    serial.writeNumber(DS3231.date())
+    serial.writeNumber(DS3231.month())
+    serial.writeNumber(DS3231.year())
+    serial.writeLine("")
 }
 function setTime () {
     // the first 2 characters after command
@@ -51,15 +52,15 @@ function setTime () {
     parseFloat(minute),
     0
     )
-    basic.showNumber(DS3231.hour())
-    basic.showNumber(DS3231.minute())
+    serial.writeNumber(DS3231.hour())
+    serial.writeNumber(DS3231.minute())
+    serial.writeLine("")
 }
 radio.onReceivedString(function (receivedString) {
     basic.pause(2000)
     for (let index = 0; index <= count - 1; index++) {
         radio.sendString("" + (dateTimeReadings[index]))
         radio.sendString("" + (weatherReadings[index]))
-        radio.sendString(String.fromCharCode(13))
         basic.pause(500)
     }
 })
@@ -91,13 +92,16 @@ weatherReadings = []
 count = 0
 radio.setGroup(1)
 radio.setTransmitPower(7)
+// Check the clock to see if we need to make a reading
 loops.everyInterval(oneMinute, function () {
-    readTime()
-    dateTimeReadings.unshift(dateTime)
-    makeReading()
-    weatherReadings.unshift(PTH)
-    count += 1
-    basic.showIcon(IconNames.Heart)
-    basic.pause(100)
-    basic.clearScreen()
+    if (DS3231.minute() == 0) {
+        readTime()
+        dateTimeReadings.push(dateTime)
+        makeReading()
+        weatherReadings.push(PTH)
+        count += 1
+        basic.showIcon(IconNames.Heart)
+        basic.pause(100)
+        basic.clearScreen()
+    }
 })
