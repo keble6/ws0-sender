@@ -9,6 +9,7 @@ function makeReading () {
     PTH = "" + BME280.pressure(BME280_P.hPa) + "," + BME280.temperature(BME280_T.T_C) + "," + BME280.humidity()
     BME280.PowerOff()
 }
+// Test block
 input.onButtonPressed(Button.A, function () {
     basic.showString("" + (dateTimeReadings[0]))
     basic.showString("" + (weatherReadings[0]))
@@ -38,6 +39,14 @@ function setDate () {
     serial.writeNumber(DS3231.year())
     serial.writeLine("")
 }
+// Reset readings
+input.onButtonPressed(Button.AB, function () {
+    weatherReadings = []
+    dateTimeReadings = []
+    count = 0
+    // Debug - reset
+    serial.writeLine("Resetting readings")
+})
 function setTime () {
     // the first 2 characters after command
     hour = stringIn.substr(2, 2)
@@ -57,6 +66,8 @@ function setTime () {
     serial.writeLine("")
 }
 radio.onReceivedString(function (receivedString) {
+    // Debug - radio received
+    serial.writeLine("radio received")
     basic.pause(2000)
     for (let index = 0; index <= count - 1; index++) {
         radio.sendString("" + (dateTimeReadings[index]))
@@ -80,28 +91,35 @@ let hour = ""
 let year = ""
 let month = ""
 let stringIn = ""
-let dateTimeReadings: string[] = []
 let PTH = ""
 let dateTime = ""
 let time = ""
 let date = ""
 let count = 0
+let dateTimeReadings: string[] = []
 let weatherReadings: string[] = []
 let oneMinute = 60 * 1000
 weatherReadings = []
+dateTimeReadings = []
 count = 0
 radio.setGroup(1)
 radio.setTransmitPower(7)
+// Debug - start serial
+serial.writeLine("abc")
 // Check the clock to see if we need to make a reading
 loops.everyInterval(oneMinute, function () {
+    // Take readings once per hour
     if (DS3231.minute() == 0) {
+        // Debug - make a reading
+        serial.writeLine("Making a reading")
         readTime()
         dateTimeReadings.push(dateTime)
         makeReading()
         weatherReadings.push(PTH)
         count += 1
-        basic.showIcon(IconNames.Heart)
-        basic.pause(100)
-        basic.clearScreen()
     }
+    // Heartbeat every minute
+    basic.showIcon(IconNames.Heart)
+    basic.pause(100)
+    basic.clearScreen()
 })
