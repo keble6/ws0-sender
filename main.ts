@@ -1,6 +1,6 @@
 function readTime () {
     date = "" + DS3231.date() + "/" + DS3231.month() + "/" + DS3231.year()
-    time = "" + DS3231.hour() + ":" + DS3231.minute() + ":" + DS3231.second()
+    time = "" + DS3231.hour() + ":" + DS3231.minute()
     dateTime = "" + date + " " + time
 }
 function makeReading () {
@@ -109,7 +109,7 @@ serial.writeLine("abc")
 // Check the clock to see if we need to make a reading
 loops.everyInterval(oneMinute, function () {
     // Take readings once per hour
-    if (DS3231.minute() == 0) {
+    if (DS3231.minute() % 15 == 0) {
         // Debug - make a reading
         serial.writeLine("Making a reading")
         readTime()
