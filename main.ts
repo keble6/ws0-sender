@@ -11,12 +11,16 @@ function makeReading () {
 }
 // Test block
 input.onButtonPressed(Button.A, function () {
-    basic.showString("" + (dateTimeReadings[0]))
-    basic.showString("" + (weatherReadings[0]))
-    basic.pause(1000)
-    basic.showNumber(count)
-    basic.pause(1000)
-    basic.clearScreen()
+    if (count > 0) {
+        basic.showString("" + (dateTimeReadings[0]))
+        basic.showString("" + (weatherReadings[0]))
+        basic.pause(1000)
+        basic.showNumber(count)
+        basic.pause(1000)
+        basic.clearScreen()
+    } else {
+        basic.showString("wait for reading")
+    }
 })
 function setDate () {
     // the first 2 characters after command
@@ -68,11 +72,13 @@ function setTime () {
 radio.onReceivedString(function (receivedString) {
     // Debug - radio received
     serial.writeLine("radio received")
-    basic.pause(2000)
-    for (let index = 0; index <= count - 1; index++) {
-        radio.sendString("" + (dateTimeReadings[index]))
-        radio.sendString("" + (weatherReadings[index]))
-        basic.pause(500)
+    if (count > 0) {
+        basic.pause(2000)
+        for (let index = 0; index <= count - 1; index++) {
+            radio.sendString("" + (dateTimeReadings[index]))
+            radio.sendString("" + (weatherReadings[index]))
+            basic.pause(500)
+        }
     }
 })
 serial.onDataReceived(serial.delimiters(Delimiters.CarriageReturn), function () {
