@@ -112,8 +112,7 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 // Debug - start serial
 serial.writeLine("abc")
-// Check the clock to see if we need to make a reading
-loops.everyInterval(oneMinute, function () {
+basic.forever(function () {
     // Take readings once per hour
     if (DS3231.minute() % 15 == 0) {
         // Debug - make a reading
@@ -128,4 +127,5 @@ loops.everyInterval(oneMinute, function () {
     basic.showIcon(IconNames.Heart)
     basic.pause(100)
     basic.clearScreen()
+    basic.pause(oneMinute - 200)
 })
