@@ -104,7 +104,7 @@ let date = ""
 let count = 0
 let dateTimeReadings: string[] = []
 let weatherReadings: string[] = []
-let oneMinute = 60 * 1000
+let oneMinute = 60000
 weatherReadings = []
 dateTimeReadings = []
 count = 0
@@ -112,7 +112,8 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 // Debug - start serial
 serial.writeLine("abc")
-basic.forever(function () {
+let lastTime = 0
+loops.everyInterval(oneMinute, function () {
     // Take readings once per hour
     if (DS3231.minute() % 15 == 0) {
         // Debug - make a reading
@@ -123,9 +124,13 @@ basic.forever(function () {
         weatherReadings.push(PTH)
         count += 1
     }
-    // Heartbeat every minute
-    basic.showIcon(IconNames.Heart)
-    basic.pause(100)
+    basic.showLeds(`
+        . . . . #
+        . . . . .
+        . . . . .
+        . . . . .
+        . . . . .
+        `)
+    basic.pause(50)
     basic.clearScreen()
-    basic.pause(oneMinute - 200)
 })
