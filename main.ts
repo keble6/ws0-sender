@@ -112,7 +112,6 @@ radio.setGroup(1)
 radio.setTransmitPower(7)
 // Debug - start serial
 serial.writeLine("abc")
-let lastTime = 0
 loops.everyInterval(oneMinute, function () {
     // Take readings once per hour
     if (DS3231.minute() % 15 == 0) {
