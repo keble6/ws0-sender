@@ -108,7 +108,7 @@ let oneMinute = 60000
 weatherReadings = []
 dateTimeReadings = []
 count = 0
-radio.setGroup(2)
+radio.setGroup(3)
 radio.setTransmitPower(7)
 // Debug - start serial
 serial.writeLine("abc")
