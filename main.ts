@@ -114,7 +114,7 @@ radio.setTransmitPower(7)
 serial.writeLine("abc")
 loops.everyInterval(oneMinute, function () {
     // Take readings once per hour
-    if (DS3231.minute() % 15 == 0) {
+    if (true) {
         // Debug - make a reading
         serial.writeLine("Making a reading")
         readTime()
