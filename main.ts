@@ -81,6 +81,11 @@ radio.onReceivedString(function (receivedString) {
         }
     }
 })
+// Instant PTH
+input.onButtonPressed(Button.B, function () {
+    makeReading()
+    basic.showString(PTH)
+})
 serial.onDataReceived(serial.delimiters(Delimiters.CarriageReturn), function () {
     stringIn = serial.readUntil(serial.delimiters(Delimiters.CarriageReturn))
     command = stringIn.substr(0, 2)
@@ -108,13 +113,13 @@ let oneMinute = 60000
 weatherReadings = []
 dateTimeReadings = []
 count = 0
-radio.setGroup(4)
+radio.setGroup(1)
 radio.setTransmitPower(7)
 // Debug - start serial
 serial.writeLine("abc")
 loops.everyInterval(oneMinute, function () {
     // Take readings once per hour
-    if (true) {
+    if (DS3231.minute() == 0) {
         // Debug - make a reading
         serial.writeLine("Making a reading")
         readTime()
