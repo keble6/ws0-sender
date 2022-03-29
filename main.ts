@@ -12,8 +12,8 @@ function makeReading () {
 // Test block
 input.onButtonPressed(Button.A, function () {
     if (count > 0) {
-        basic.showString("" + (dateTimeReadings[0]))
-        basic.showString("" + (weatherReadings[0]))
+        basic.showString("" + (dateTimeReadings[count - 1]))
+        basic.showString("" + (weatherReadings[count - 1]))
         basic.pause(1000)
         basic.showNumber(count)
         basic.pause(1000)
