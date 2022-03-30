@@ -75,7 +75,7 @@ radio.onReceivedString(function (receivedString) {
     if (count > 0) {
         basic.pause(2000)
         for (let index = 0; index <= count - 1; index++) {
-            radio.sendString("" + (dateTimeReadings[index]))
+            radio.sendString("" + dateTimeReadings[index] + ",")
             radio.sendString("" + (weatherReadings[index]))
             basic.pause(500)
         }
